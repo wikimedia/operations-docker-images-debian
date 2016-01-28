@@ -68,7 +68,7 @@ class DebianBuilder:
             '--components=' + ','.join(self.base_components),
             '--variant=' + self.variant,
             self.suite,
-            self.chroot,
+            self.chroot_base,
             self.mirror,
         ])
 
