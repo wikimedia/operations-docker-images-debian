@@ -19,7 +19,7 @@ class DebianRepo:
 
 class DebianBuilder:
     def __init__(self, mirror, suite, base_path,
-                 variant='minbase'
+                 variant='minbase',
                  base_components=None,
                  repo_sources=None):
         self.mirror = mirror
