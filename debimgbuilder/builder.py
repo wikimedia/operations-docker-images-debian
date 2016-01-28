@@ -41,7 +41,6 @@ class DebianBuilder:
                     self.base_components
                 )
             ]
-        self.base_components = base_components
         self.variant = variant
 
     def chroot(self, *args):
