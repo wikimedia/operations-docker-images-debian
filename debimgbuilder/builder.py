@@ -201,6 +201,11 @@ Acquire::CompressionTypes::Order:: "gz";""")
             '--transform', 's,^./,,',
             '.'
         ])
+        subprocess.check_call([
+            '/bin/rm',
+            '-r', '-f',
+            self.chroot_base
+        ])
 
     def build(self):
         self.initialize_chroot()
