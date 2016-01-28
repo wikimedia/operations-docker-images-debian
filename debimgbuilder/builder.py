@@ -211,13 +211,3 @@ Acquire::CompressionTypes::Order:: "gz";""")
         self.update_apt()
         self.cleanup()
         self.tar_chroot()
-
-
-db = DebianBuilder(
-    'http://httpredir.debian.org/debian',
-    'jessie',
-    'jessie',
-    []
-)
-
-db.run()
