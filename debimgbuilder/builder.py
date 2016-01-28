@@ -203,7 +203,7 @@ Acquire::CompressionTypes::Order:: "gz";""")
             '.'
         ])
 
-    def run(self):
+    def build(self):
         self.initialize_chroot()
         self.setup_apt_policy()
         self.setup_apt_sources()
