@@ -14,7 +14,7 @@ class DebianBaseImageBuilder(DebianBuilder):
         )
 
     def setup_apt_sources(self):
-        super()
+        super().setup_apt_sources()
         # Add key for apt.wikimedia.org
         wikimedia_apt_key = """
 -----BEGIN PGP PUBLIC KEY BLOCK-----
