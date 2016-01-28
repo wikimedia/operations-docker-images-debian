@@ -1,10 +1,10 @@
-from debimgbuilder.builder import DebianBuilder, DebianRepo
+from debimgbuilder.builder import DebianRepo
+from debimgbuilder.jessie import JessieBackportsImageBuilder
 
-
-class DebianBaseImageBuilder(DebianBuilder):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # Add Wikimedia apt repository
+class DebianBaseImageBuilder(JessieBackportsImageBuilder):
+    def setup_apt_sources(self):
+        super().setup_apt_sources()
+        # Setup wikimedia repository
         self.repo_sources.append(
             DebianRepo(
                 'http://apt.wikimedia.org/wikimedia',
@@ -12,9 +12,6 @@ class DebianBaseImageBuilder(DebianBuilder):
                 ['main', 'backports', 'thirdparty']
             )
         )
-
-    def setup_apt_sources(self):
-        super().setup_apt_sources()
         # Add key for apt.wikimedia.org
         wikimedia_apt_key = """
 -----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -65,8 +62,8 @@ class DebianProdImageBuilder(DebianBaseImageBuilder):
 if __name__ == '__main__':
     db = DebianProdImageBuilder(
         'debian:wikimedia-prod',
-        'http://mirrors.wikimedia.org/debian',
         'jessie',
+        'http://mirrors.wikimedia.org/debian',
         'jessie',
     )
     db.build()

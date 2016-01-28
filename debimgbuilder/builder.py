@@ -18,7 +18,9 @@ class DebianRepo:
 
 
 class DebianBuilder:
-    def __init__(self, image_name, mirror, suite, base_path,
+    def __init__(self, image_name, base_path,
+                 mirror='http://httpredir.debian.org/debian',
+                 suite='jessie',
                  variant='minbase',
                  base_components=None,
                  repo_sources=None):
@@ -30,10 +32,7 @@ class DebianBuilder:
         self.debootstrap_path = '/usr/sbin/debootstrap'
         self.chroot_path = '/usr/sbin/chroot'
         self.repo_sources = repo_sources
-        if base_components is None:
-            self.base_components = ['main', 'contrib']
-        else:
-            self.base_components = base_components
+        self.base_components = base_components
         if repo_sources is None:
             self.repo_sources = [
                 DebianRepo(
@@ -188,6 +187,9 @@ Acquire::CompressionTypes::Order:: "gz";""")
         )
 
     def setup_apt_sources(self):
+        pass
+
+    def write_apt_sources(self):
         for rs in self.repo_sources:
             self.append_line('/etc/apt/sources.list', str(rs))
 
@@ -226,6 +228,7 @@ Acquire::CompressionTypes::Order:: "gz";""")
         self.initialize_chroot()
         self.setup_apt_policy()
         self.setup_apt_sources()
+        self.write_apt_sources()
         self.setup_dns()
         self.update_apt()
         self.cleanup()
