@@ -19,8 +19,9 @@ class DebianRepo:
 
 class DebianBuilder:
     def __init__(self, mirror, suite, base_path,
-                 base_components=['main', 'contrib', 'non-free'],
-                 repo_sources=[]):
+                 variant='minbase'
+                 base_components=None,
+                 repo_sources=None):
         self.mirror = mirror
         self.suite = suite
         self.base_path = base_path
@@ -28,7 +29,20 @@ class DebianBuilder:
         self.debootstrap_path = '/usr/sbin/debootstrap'
         self.chroot_path = '/usr/sbin/chroot'
         self.repo_sources = repo_sources
+        if base_components is None:
+            self.base_components = ['main', 'contrib']
+        else:
+            self.base_components = base_components
+        if repo_sources is None:
+            self.repo_sources = [
+                DebianRepo(
+                    'http://security.debian.org/',
+                    '{suite}/updates'.format(suite=suite),
+                    self.base_components
+                )
+            ]
         self.base_components = base_components
+        self.variant = variant
 
     def chroot(self, *args):
         return subprocess.check_call([
@@ -52,7 +66,8 @@ class DebianBuilder:
     def initialize_chroot(self):
         subprocess.check_call([
             self.debootstrap_path,
-            '--components', self.base_components,
+            '--components=' + ','.join(self.base_components),
+            '--variant=' + self.variant,
             self.suite,
             self.chroot,
             self.mirror,
@@ -174,7 +189,6 @@ Acquire::CompressionTypes::Order:: "gz";""")
     def cleanup(self):
         self.chroot('/usr/bin/apt-get', 'clean')
         self.chroot('/bin/rm', '-r', '-f', '/var/lib/apt/lists/*')
-
 
     def tar_chroot(self):
         subprocess.check_call([
