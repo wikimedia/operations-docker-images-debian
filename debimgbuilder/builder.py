@@ -18,10 +18,11 @@ class DebianRepo:
 
 
 class DebianBuilder:
-    def __init__(self, mirror, suite, base_path,
+    def __init__(self, image_name, mirror, suite, base_path,
                  variant='minbase',
                  base_components=None,
                  repo_sources=None):
+        self.image_name = image_name
         self.mirror = mirror
         self.suite = suite
         self.base_path = base_path
@@ -61,6 +62,20 @@ class DebianBuilder:
     def append_line(self, path, line):
         with self.chroot_file(path, 'a') as f:
             f.write(line + '\n')
+
+    def write_dockerfile(self):
+        with open(os.path.join(self.base_path, 'Dockerfile'), 'w') as f:
+            f.write('FROM scratch\n')
+            f.write('ADD root.tar.xz /\n')
+            f.write('CMD /bin/bash\n')
+
+    def build_dockerimage(self):
+        subprocess.check_call([
+            '/usr/bin/docker',
+            'build',
+            '-t', self.image_name,
+            self.base_path
+        ])
 
     def initialize_chroot(self):
         subprocess.check_call([
@@ -215,3 +230,5 @@ Acquire::CompressionTypes::Order:: "gz";""")
         self.update_apt()
         self.cleanup()
         self.tar_chroot()
+        self.write_dockerfile()
+        self.build_dockerimage()

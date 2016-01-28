@@ -25,6 +25,7 @@ class DebianProdImageBuilder(DebianBaseImageBuilder):
 
 if __name__ == '__main__':
     db = DebianProdImageBuilder(
+        'debian:wikimedia-prod',
         'http://mirrors.wikimedia.org/debian',
         'jessie',
         'jessie',
