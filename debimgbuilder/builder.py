@@ -13,7 +13,7 @@ class DebianRepo:
         return 'deb {uri} {suite} {components}'.format(
             uri=self.uri,
             suite=self.suite,
-            components=' '.join(self.componenets)
+            components=' '.join(self.components)
         )
 
 
