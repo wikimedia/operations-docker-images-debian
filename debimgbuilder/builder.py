@@ -175,7 +175,7 @@ Acquire::CompressionTypes::Order:: "gz";""")
 
     def setup_apt_sources(self):
         for rs in self.repo_sources:
-            self.append_line('/etc/apt/sources.list', rs)
+            self.append_line('/etc/apt/sources.list', str(rs))
 
     def setup_dns(self):
         with open('/etc/resolv.conf') as read:
