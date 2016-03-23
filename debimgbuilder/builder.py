@@ -208,7 +208,7 @@ Acquire::CompressionTypes::Order:: "gz";""")
         self.chroot('/usr/bin/apt-get', 'update')
         self.chroot('/usr/bin/apt-get', 'dist-upgrade', '--yes')
 
-    def cleanup(self):
+    def cleanup_chroot(self):
         self.chroot('/usr/bin/apt-get', 'clean')
         self.chroot('/bin/rm', '-r', '-f', '/var/lib/apt/lists/*')
 
@@ -230,6 +230,13 @@ Acquire::CompressionTypes::Order:: "gz";""")
             self.chroot_base
         ])
 
+    def cleanup(self):
+        subprocess.check_call([
+            '/bin/rm',
+            '-r', '-f',
+            self.base_path
+        ])
+
     def build(self):
         self.check_prereqs()
         self.initialize_chroot()
@@ -238,7 +245,8 @@ Acquire::CompressionTypes::Order:: "gz";""")
         self.write_apt_sources()
         self.setup_dns()
         self.update_apt()
-        self.cleanup()
+        self.cleanup_chroot()
         self.tar_chroot()
         self.write_dockerfile()
         self.build_dockerimage()
+        self.cleanup()
