@@ -60,8 +60,8 @@ class DebianProdImageBuilder(DebianBaseImageBuilder):
 
 
 if __name__ == '__main__':
-    db = DebianProdImageBuilder(
-        'debian:wikimedia-prod',
+    db = DebianBaseImageBuilder(
+        'debian:wikimedia',
         'jessie',
         'http://mirrors.wikimedia.org/debian',
         'jessie',
