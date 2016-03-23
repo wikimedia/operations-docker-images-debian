@@ -82,7 +82,7 @@ class DebianBuilder:
 
     def initialize_chroot(self):
         if not os.path.exists(self.chroot_base):
-            os.mkdirs(self.chroot_base)
+            os.makedirs(self.chroot_base)
         subprocess.check_call([
             self.debootstrap_path,
             '--components=' + ','.join(self.base_components),
