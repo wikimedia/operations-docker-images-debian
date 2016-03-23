@@ -81,6 +81,8 @@ class DebianBuilder:
             raise Exception('debootstrap package not found, please install it')
 
     def initialize_chroot(self):
+        if not os.path.exists(self.chroot_base):
+            os.mkdirs(self.chroot_base)
         subprocess.check_call([
             self.debootstrap_path,
             '--components=' + ','.join(self.base_components),
