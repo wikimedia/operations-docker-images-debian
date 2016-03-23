@@ -76,6 +76,10 @@ class DebianBuilder:
             self.base_path
         ])
 
+    def check_prereqs(self):
+        if not os.path.exists(self.debootstrap_path):
+            raise Exception('debootstrap package not found, please install it')
+
     def initialize_chroot(self):
         subprocess.check_call([
             self.debootstrap_path,
@@ -225,6 +229,7 @@ Acquire::CompressionTypes::Order:: "gz";""")
         ])
 
     def build(self):
+        self.check_prereqs()
         self.initialize_chroot()
         self.setup_apt_policy()
         self.setup_apt_sources()
